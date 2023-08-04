@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,22 +16,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject graphics;
 
     //Movimentação
+    public bool canMove = true;
     public float fJumpForce = 5.0f;
     [SerializeField] float moveSpeed = 100f;
-    public float attackDuration = 0.5f;
-    [SerializeField] float attackCooldown = 1f;
-    float lastAttackTime = -Mathf.Infinity;
+    public bool isGrounded;
     public bool bCanJump = true;
     public float horizontalInput;
-    [SerializeField] bool rocketJump = true;
-    [SerializeField] int rocketCount;
-    [SerializeField] int rocketMax;
 
-    //Atirar
-    public bool canShoot;
-    float atkCooldown = 1f;
-    float lastAttack = 0;
-
+    //Dodge
+    [SerializeField] bool canDodge;
+    [SerializeField] float dodgeCooldown = 1f;
+    [SerializeField] float dodgeTimer;
+    [SerializeField] float dodgeDuration = 0.2f;
+    [SerializeField] float initialGravity;
+    [SerializeField] GameObject dustPrefab;
     //Debugger
     [SerializeField] bool debugColor;
     [SerializeField] float comp;
@@ -40,44 +41,86 @@ public class PlayerMovement : MonoBehaviour
         //sprite = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        dodgeTimer = dodgeCooldown;
+        initialGravity = rb.gravityScale;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        lastAttack -= Time.deltaTime;
-        if(lastAttack <= 0)
-        {
-            canShoot = true;
-        }
+
         horizontalInput = Input.GetAxisRaw("Horizontal"); // get the input for horizontal movement
         Debugger();
         MovementHandler();
         JumpHandler();
         AnimationHandler();
+        DodgeHandler();
     }
 
     private void MovementHandler()
     {
 
         // move the object horizontally
-        Vector2 movement = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-        rb.velocity = movement;
+        if(canMove)
+        {
+            Vector2 movement = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+            rb.velocity = movement;
+        }
+
+
+    }
+    private void DodgeHandler()
+    {
+        dodgeTimer -= Time.deltaTime;
+        if(horizontalInput != 0)
+        {
+            if (dodgeTimer < 0)
+            {
+                canDodge = true;
+                sprite.color = Color.white;
+            }
+            else
+            {
+                sprite.color = Color.gray;
+            }
+            if (canDodge)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    StartCoroutine(Dodge());
+                }
+            }
+        }
+        
+    }
+    IEnumerator Dodge()
+    {
+        dodgeTimer = dodgeCooldown;
+        if(horizontalInput != 0 )
+        {
+            GameObject dust = Instantiate(dustPrefab, transform.position, Quaternion.identity);
+            canMove = false;
+            rb.velocity = Vector3.zero;
+            rb.gravityScale = 0;
+            rb.AddForce(Vector3.right * horizontalInput * fJumpForce * 100f );
+            yield return new WaitForSeconds(dodgeDuration);
+            rb.gravityScale = initialGravity;
+            rb.velocity = Vector3.zero;
+            canMove = true;
+        }
+        else
+        {
+            yield return null;
+        }
+        
 
     }
 
     private void JumpHandler()
     {
 
-        if (bCanJump)
-        {
-
-
-
-        }
         if (Input.GetKeyDown(KeyCode.W) && bCanJump)
         {
-
 
             Jump();
             bCanJump = false;
@@ -92,6 +135,11 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    private void CooldownHandler()
+    {
+
+    }
+
     void Debugger()
     {
         RaycastHit2D[] hits;
@@ -100,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         hits = Physics2D.RaycastAll(transform.position, -transform.up, comp);
         hitsL = Physics2D.RaycastAll(new Vector2(transform.position.x - rayX, transform.position.y), -transform.up, comp);
         hitsR = Physics2D.RaycastAll(new Vector2(transform.position.x + rayX, transform.position.y), -transform.up, comp);
-        bool isGrounded = false;
+        isGrounded = false;
         Debug.DrawRay(new Vector2(transform.position.x, transform.position.y), -transform.up * comp);
         Debug.DrawRay(new Vector2(transform.position.x - rayX, transform.position.y), -transform.up * comp);
         Debug.DrawRay(new Vector2(transform.position.x + rayX, transform.position.y), -transform.up * comp);
@@ -165,11 +213,7 @@ public class PlayerMovement : MonoBehaviour
 
         
         bCanJump = isGrounded;
-        if(bCanJump)
-        {
-            rocketCount = 0;
-        }
-        rocketJump = !isGrounded;
+
     }
     
     void AnimationHandler()
@@ -179,77 +223,10 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("IsRunning", Mathf.Abs(horizontalInput) > 0f);
         if (horizontalInput != 0)
         {
-            graphics.transform.localScale = new Vector3(horizontalInput * transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        }
-        else
-        {
-            graphics.transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-        }
-        if(canShoot)
-        {
-
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                
-                lastAttack = attackCooldown;
-                lastAttackTime = Time.time;
-                StartCoroutine(Attack("AttackU", "StopAttackU"));
-                
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                
-                lastAttack = attackCooldown;
-                if(rocketJump && rocketCount < rocketMax)
-                {
-                    rocketCount++;
-                    rb.velocity = Vector2.zero;
-                    rb.AddForce(new Vector2(0f, fJumpForce), ForceMode2D.Impulse);
-                }
-                
-                lastAttackTime = Time.time;
-                StartCoroutine(Attack("AttackD", "StopAttackD"));
-                
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                
-                lastAttack = attackCooldown;
-                lastAttackTime = Time.time;
-                if(horizontalInput >= 0)
-                {
-                    StartCoroutine(Attack("AttackL", "StopAttackL"));
-                }
-                else
-                {
-                    StartCoroutine(Attack("AttackR", "StopAttackR"));
-                }
-                
-
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                
-                lastAttack = attackCooldown;
-                lastAttackTime = Time.time;
-                if(horizontalInput >= 0)
-                {
-                    StartCoroutine(Attack("AttackR", "StopAttackR"));
-                }
-                else
-                {
-                    StartCoroutine(Attack("AttackL", "StopAttackL"));
-                }
-                
-
-            }
+            sprite.flipX = horizontalInput < 0;
         }
 
-        IEnumerator Attack(string pos, string pos2)
-        {
-            anim.SetTrigger(pos);
-            yield return new WaitForSeconds(attackDuration);
-            anim.SetTrigger(pos2);
-        }
+
+
     }
 }

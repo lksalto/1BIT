@@ -177,16 +177,18 @@ MonoBehaviour:
   player: {fileID: 2522428973739242397}
   sprite: {fileID: 2522428975754618666}
   graphics: {fileID: 2522428975754618660}
+  canMove: 1
   fJumpForce: 7
   moveSpeed: 6
-  attackDuration: 0.5
-  attackCooldown: 0.1
+  isGrounded: 0
   bCanJump: 1
   horizontalInput: 0
-  rocketJump: 1
-  rocketCount: 0
-  rocketMax: 2
-  canShoot: 1
+  canDodge: 0
+  dodgeCooldown: 1
+  dodgeTimer: 0
+  dodgeDuration: 0.2
+  initialGravity: 0
+  dustPrefab: {fileID: 279083341249481778, guid: d1d065a6bd597374b874c48f1cd86eff, type: 3}
   debugColor: 0
   comp: 0.53
   rayX: 1
@@ -239,6 +241,13 @@ MonoBehaviour:
   - {fileID: 2522428975025119990}
   bulletPrefab: {fileID: 3761173481621576695, guid: 8f136381bc124cc4192bd45cb9ee562c, type: 3}
   pm: {fileID: 2522428973739242396}
+  rocketJump: 1
+  rocketCount: 0
+  rocketMax: 3
+  attackDuration: 0.5
+  attackCooldown: 0.2
+  canShoot: 0
+  isShooting: 0
 --- !u!61 &2522428973739242373
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -3921593262224964658}
   - component: {fileID: -7420984164507014484}
   - component: {fileID: 3028832847584467264}
+  - component: {fileID: 6259905676164363539}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -112,6 +113,7 @@ MonoBehaviour:
   jumpCooldown: 3
   raycastSize: 1.2
   isGrounded: 0
+  isPounding: 0
 --- !u!50 &-7420984164507014484
 Rigidbody2D:
   serializedVersion: 4
@@ -124,7 +126,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 40
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -148,4 +150,20 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.24
+--- !u!58 &6259905676164363539
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075596805001617173}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.02}
+  serializedVersion: 2
+  m_Radius: 1.1

@@ -18,6 +18,7 @@ public class Boss : MonoBehaviour
     float jumpCounter;
     public float raycastSize;
     public bool isGrounded;
+    public bool isPounding;
     float calculatedDistance;
     Rigidbody2D rb;
     
@@ -52,8 +53,8 @@ public class Boss : MonoBehaviour
                 
                 playerTransform = detectedObject.transform;
                 playerDetected = true; // set player detected flag to true
-                //GetComponent<SpriteRenderer>().color = Color.red; // set color of enemy object to red
-                
+                                       //GetComponent<SpriteRenderer>().color = Color.red; // set color of enemy object to red
+
                 if (!isGrounded)
                 {
 
@@ -61,7 +62,7 @@ public class Boss : MonoBehaviour
                     if (transform.position.x == jumpTarget)
                     {
                         isGrounded = true;
-                        rb.AddForce(Vector2.down * jumpHeigth/25, ForceMode2D.Impulse);
+                        GroundPound();
                     }
 
                         
@@ -81,7 +82,19 @@ public class Boss : MonoBehaviour
         }
 
     }
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Floor"))
+        {
+            Debug.Log("Ouch");
+            GroundPound();
+           
+        }
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
     private void GroundCheck()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, transform.localScale.y * 1.2f, groundLayer);
@@ -100,7 +113,13 @@ public class Boss : MonoBehaviour
         rb.AddForce(Vector2.up * jumpHeigth, ForceMode2D.Impulse);
     }
 
-
+    private void GroundPound()
+    {
+        jumpTarget = gameObject.transform.position.x;
+        rb.velocity = new Vector3(0,0,0);
+        
+        rb.AddForce(Vector2.down * jumpHeigth, ForceMode2D.Impulse);
+    }
 
 }
 
