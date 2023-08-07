@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 259729619656544010}
   - component: {fileID: 2599705966922171407}
   - component: {fileID: 2086756116796494743}
+  - component: {fileID: -7823158797407154697}
   m_Layer: 8
   m_Name: Fantasmito
   m_TagString: Enemy
@@ -148,13 +149,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkCd: 3
   atkCount: 0
+  bulletForce: 25
   detectionRadius: 9
   newDetectionRadius: 25
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 1
-  life: 2
   enemyType: 1
   bulletPrefab: {fileID: 3761173481621576695, guid: 0817898ce4fd1034bace7e570219e413, type: 3}
   spawnPoint: {fileID: 5241686520525468053}
+--- !u!114 &-7823158797407154697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080910204704302944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1025a68ed0f9254b80ec32045199914, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 1

@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
     public float newDetectionRadius = 25f;
     public LayerMask playerLayer; // the layer on which the player object is placed
     public float moveSpeed = 1;
-    public float life;
     public int enemyType;
     private bool playerDetected = false; // flag to track if player is detected
     private Transform playerTransform;
@@ -65,11 +64,5 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.yellow; // set color of gizmo to yellow
         Gizmos.DrawWireSphere(transform.position, detectionRadius); // draw wire sphere gizmo to show detection radius
     }
-    public void CalculateLife()
-    {
-        if(life <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+
 }

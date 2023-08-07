@@ -8,12 +8,12 @@ public class EnemyBullet : MonoBehaviour
     [SerializeField] GameObject explosionPrefab;
     [SerializeField] float bulletSpeed = 10;
     [SerializeField] Transform explosionTransf;
-
+    [SerializeField] int dmg;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.AddRelativeForce(new Vector2(bulletSpeed, 0), ForceMode2D.Impulse);
+        //rb.AddRelativeForce(new Vector2(bulletSpeed, 0), ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -25,6 +25,10 @@ public class EnemyBullet : MonoBehaviour
     {
         GameObject exp = Instantiate(explosionPrefab, explosionTransf);
         exp.transform.parent = null;
+        if(collision.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerLife>().AddLife(-dmg);
+        }
         Destroy(gameObject);
     }
 }

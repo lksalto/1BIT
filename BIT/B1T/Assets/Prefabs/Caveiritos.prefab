@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 5286598096377911300}
   - component: {fileID: 4006056687780130431}
   - component: {fileID: 2402591895716206046}
+  - component: {fileID: -4162599346385453161}
   m_Layer: 8
   m_Name: Caveiritos
   m_TagString: Enemy
@@ -180,14 +181,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkCd: 3
   atkCount: 0
-  bulletForce: 550
+  bulletForce: 250
   detectionRadius: 10
   newDetectionRadius: 30
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 1
-  life: 5
   enemyType: 2
   bulletPrefab: {fileID: 3761173481621576695, guid: 0817898ce4fd1034bace7e570219e413, type: 3}
   spawnPoint: {fileID: 3153462200443393763}
+--- !u!114 &-4162599346385453161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4546393726659181140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1025a68ed0f9254b80ec32045199914, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 15

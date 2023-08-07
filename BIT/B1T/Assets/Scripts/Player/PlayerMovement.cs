@@ -98,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         dodgeTimer = dodgeCooldown;
         if(horizontalInput != 0 )
         {
+            canDodge = false;
             GameObject dust = Instantiate(dustPrefab, transform.position, Quaternion.identity);
             canMove = false;
             rb.velocity = Vector3.zero;

@@ -9,7 +9,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] GameObject explosionPrefab;
     [SerializeField] float bulletSpeed = 10;
     [SerializeField] Transform explosionTransf;
-    Enemy enemy;
+    [SerializeField] int dmg = 1;
+    EnemyLife enemyLife;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,9 +27,8 @@ public class Bullet : MonoBehaviour
     {
         if(collision.CompareTag("Enemy"))
         {
-            enemy = collision.GetComponent<Enemy>();
-            enemy.life--;
-            enemy.CalculateLife();
+            enemyLife = collision.GetComponent<EnemyLife>();
+            enemyLife.TakeDamage(dmg);
         }
         GameObject exp = Instantiate(explosionPrefab, explosionTransf);
         exp.transform.parent = null;

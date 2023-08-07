@@ -13,11 +13,11 @@ public class Shooting : MonoBehaviour
     [SerializeField] int rocketMax;
     public float attackDuration = 0.5f;
     [SerializeField] float attackCooldown = 1f;
-    float lastAttackTime = -Mathf.Infinity;
+    //float lastAttackTime = -Mathf.Infinity;
     //Atirar
     public bool canShoot;
     public bool isShooting;
-    float atkCooldown = 1f;
+    //float atkCooldown = 1f;
     float lastAttack = 0;
 
     Rigidbody2D rb;
