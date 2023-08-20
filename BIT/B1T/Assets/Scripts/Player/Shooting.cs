@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
+    public bool fireContinuously = false;
     [SerializeField] List<Transform> spawnLocations;
     [SerializeField] GameObject bulletPrefab;
     GameObject bullet;
@@ -34,45 +35,82 @@ public class Shooting : MonoBehaviour
     }
     private void Shoot()
     {
-        if (canShoot && !isShooting)
+        if(fireContinuously)
         {
+            if (canShoot && !isShooting)
+            {
 
-            if (Input.GetKey(KeyCode.RightArrow))
+                if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    StartCoroutine(ShootContinuously(0, attackCooldown, false));
+                }
+
+                else if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    StartCoroutine(ShootContinuously(1, attackCooldown, false));
+                }
+                else if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    StartCoroutine(ShootContinuously(2, attackCooldown, false));
+                }
+                else if (Input.GetKey(KeyCode.DownArrow))
+                {
+                    StartCoroutine(ShootContinuously(3, attackCooldown, true));
+                    if (rocketJump && rocketCount < rocketMax)
+                    {
+                        rocketCount++;
+                        rb.velocity = Vector2.zero;
+                        rb.AddForce(new Vector2(0f, pm.fJumpForce), ForceMode2D.Impulse);
+                    }
+
+
+
+                }
+            }
+            if (isShooting)
             {
-                StartCoroutine(ShootContinuously(0, attackCooldown, false));
+                if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow))
+                {
+                    isShooting = false;
+                    StopAllCoroutines();
+                }
+
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                bullet = Instantiate(bulletPrefab, spawnLocations[0]);
+                bullet.transform.parent = null;
             }
 
-            else if (Input.GetKey(KeyCode.UpArrow))
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                StartCoroutine(ShootContinuously(1, attackCooldown, false));
+                bullet = Instantiate(bulletPrefab, spawnLocations[1]);
+                bullet.transform.parent = null;
             }
-            else if (Input.GetKey(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                StartCoroutine(ShootContinuously(2, attackCooldown, false));
+                bullet = Instantiate(bulletPrefab, spawnLocations[2]);
+                bullet.transform.parent = null;
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                StartCoroutine(ShootContinuously(3, attackCooldown, true));
+                bullet = Instantiate(bulletPrefab, spawnLocations[3]);
+                bullet.transform.parent = null;
                 if (rocketJump && rocketCount < rocketMax)
                 {
                     rocketCount++;
                     rb.velocity = Vector2.zero;
                     rb.AddForce(new Vector2(0f, pm.fJumpForce), ForceMode2D.Impulse);
                 }
-               
+
 
 
             }
         }
-        if (isShooting)
-        {
-            if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.DownArrow))
-            {
-                isShooting = false;
-                StopAllCoroutines();
-            }
-
-        }
+        
     }
     private void ManageCooldowns()
     {

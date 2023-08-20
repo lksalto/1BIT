@@ -191,7 +191,7 @@ MonoBehaviour:
   initialGravity: 0
   dustPrefab: {fileID: 279083341249481778, guid: d1d065a6bd597374b874c48f1cd86eff, type: 3}
   debugColor: 0
-  comp: 0.53
+  comp: 0.68
   rayX: 1
 --- !u!114 &2522428973739242397
 MonoBehaviour:
@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d3d08de4f09aa4cb7dcdda5b03f94f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireContinuously: 0
   spawnLocations:
   - {fileID: 2522428974028571793}
   - {fileID: 2522428974602873711}

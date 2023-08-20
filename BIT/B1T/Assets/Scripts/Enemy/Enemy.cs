@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
             {
                 playerTransform = detectedObject.transform;
                 playerDetected = true; // set player detected flag to true
+                /*
                 if (enemyType == 1)
                 {
                     playerDetected = true; // set player detected flag to true
@@ -39,8 +40,8 @@ public class Enemy : MonoBehaviour
                     newPosition.y += (newPosition.y - currentPosition.y) * 1.5f;
                     transform.position = newPosition;
                     detectionRadius = newDetectionRadius;
-                }
-                else if(enemyType == 2)
+                }*/
+                if(enemyType == 2)
                 {
                     transform.position = Vector2.MoveTowards(transform.position, new Vector2(playerTransform.position.x, transform.position.y), moveSpeed * Time.deltaTime);
                     if (atkCount <= 0)

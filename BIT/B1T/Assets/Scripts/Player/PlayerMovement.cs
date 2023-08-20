@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-
+        rb.velocity = new Vector3(rb.velocity.x, 0, 0);
         rb.AddForce(new Vector2(0f, fJumpForce), ForceMode2D.Impulse);
 
     }
@@ -160,8 +160,8 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit2D hit = hits[i];
             if (hit.collider.CompareTag("Floor"))
             {
-                
-                if (transform.position.y > hit.collider.transform.position.y)
+                Debug.Log(hit.point.y);
+                if (transform.position.y > hit.point.y)
                     isGrounded = true;
                     
                     //Debug.Log("mid");
@@ -176,7 +176,7 @@ public class PlayerMovement : MonoBehaviour
             if (hitL.collider.CompareTag("Floor"))
             {
                 
-                if (transform.position.y > hitL.collider.transform.position.y + hitL.collider.transform.localScale.y/2)
+                if (transform.position.y > hitL.point.y)
                     isGrounded = true;
                     
                     //Debug.Log("left");
@@ -192,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
             if (hitR.collider.CompareTag("Floor"))
             {
                
-                if (transform.position.y > hitR.collider.transform.position.y + hitR.collider.transform.localScale.y/2)
+                if (transform.position.y > hitR.point.y)
                     isGrounded = true;
                     
                     //Debug.Log("right");
